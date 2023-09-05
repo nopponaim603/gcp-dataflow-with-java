@@ -1,0 +1,38 @@
+# Set up environment variables
+#export PROJECT_ID=gcp-sample-397606
+#export BUCKET=gs://cloud-dataflow-java
+export BASE_DIR=/d/All_Intellij_Projects/gcp-dataflow-with-java
+export PROJECT_ID=healthy-reason-396205
+export BUCKET=gs://cloud-dataflow-java123
+#export MAIN_CLASS_NAME=dataflowsamples.SimpleFilterJob
+export REGION='us-east1'
+export RUNNER=DataflowRunner
+
+echo "PROJECT_ID: $PROJECT_ID, BUCKET: $BUCKET, BASE_DIR: $BASE_DIR"
+echo "MAIN_CLASS_NAME: $MAIN_CLASS_NAME, REGION: $REGION, RUNNER: $RUNNER"
+echo $GOOGLE_APPLICATION_CREDENTIALS
+
+mvn compile exec:java \
+-Dexec.mainClass=${MAIN_CLASS_NAME}
+
+cd $BASE_DIR
+mvn clean package -Pdataflow
+mvn compile exec:java \
+-Pdataflow \
+-Dexec.mainClass=${MAIN_CLASS_NAME} \
+-Dexec.cleanupDaemonThreads=false \
+-Dexec.args=" \
+--project=${PROJECT_ID} \
+--region=${REGION} \
+--stagingLocation=${BUCKET}/staging \
+--tempLocation=${BUCKET}/temp \
+--runner=${RUNNER}"
+
+mvn -Pdataflow exec:exec -Dexec.executable="java" -Dexec.args="-jar target/gcp-dataflow-with-java-bundled-1.0-SNAPSHOT.jar"
+java -jar target/gcp-dataflow-with-java-bundled-1.0-SNAPSHOT.jar
+java -cp ./target/gcp-dataflow-with-java-bundled-1.0-SNAPSHOT.jar ${MAIN_CLASS_NAME}  --project=${PROJECT_ID} --region=${REGION} --stagingLocation=${BUCKET}/staging  --tempLocation=${BUCKET}/temp --runner=${RUNNER}
+java -cp ./target/gcp-dataflow-with-java-bundled-1.0-SNAPSHOT.jar ${MAIN_CLASS_NAME} --runner=${RUNNER} --project=${PROJECT_ID} --region=${REGION} --stagingLocation=${BUCKET}/staging  --tempLocation=${BUCKET}/temp
+
+
+# Download dependencies listed in pom.xml
+mvn clean dependency:resolve
