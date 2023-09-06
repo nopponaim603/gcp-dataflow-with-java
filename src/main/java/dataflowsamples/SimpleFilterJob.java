@@ -1,17 +1,13 @@
 package dataflowsamples;
 
 import org.apache.beam.sdk.Pipeline;
-import org.apache.beam.sdk.io.FileSystems;
 import org.apache.beam.sdk.io.TextIO;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.sdk.transforms.ParDo;
 import org.apache.beam.sdk.values.PCollection;
 
-import java.io.File;
-
 public class SimpleFilterJob {
-
     // This is a PTransform that defines the logic to filter data based on age.
     static class FilterFn extends DoFn<String, String> {
         @ProcessElement
@@ -29,20 +25,21 @@ public class SimpleFilterJob {
     }
 
     public static void main(String[] args) {
-        Pipeline p = Pipeline.create();
-
-        // Use GCS paths for input and output
-        String inputFilePath = "gs://cloud-dataflow-java123/input.csv";
-        String outputFilePath = "gs://cloud-dataflow-java123/output.csv";
+        PipelineOptionsFactory.register(JobOptions.class);
+        JobOptions options = PipelineOptionsFactory
+                .fromArgs(args)
+                .withValidation()
+                .as(JobOptions.class);
+        Pipeline p = Pipeline.create(options);
 
         // PCollection: Represents the data read from the input file.
-        PCollection<String> input = p.apply(TextIO.read().from(inputFilePath));
+        PCollection<String> input = p.apply(TextIO.read().from(options.getInputFile()));
 
         // PTransform: Applying the FilterFn transformation to the input data.
-        PCollection<String> output = input.apply(ParDo.of(new FilterFn()));
+        PCollection<String> output = input.apply(ParDo.of(new SimpleFilterJob.FilterFn()));
 
         // PTransform: Writing the filtered data to an output file.
-        output.apply(TextIO.write().to(outputFilePath));
+        output.apply(TextIO.write().to(options.getOutputFile()));
 
         p.run().waitUntilFinish();
     }

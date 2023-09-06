@@ -34,11 +34,6 @@
             <artifactId>slf4j-jdk14</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.beam</groupId>
-            <artifactId>beam-runners-google-cloud-dataflow-java</artifactId>
-            <version>2.42.0</version>
-        </dependency>
     </dependencies>
     <profiles>
         <profile>
@@ -117,10 +112,10 @@
                             </filters>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-                                <transformer
+                               <!-- <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>dataflowsamples.SimpleFilterJob2</mainClass>
-                                </transformer>
+                                </transformer>-->
                             </transformers>
                         </configuration>
                     </execution>
