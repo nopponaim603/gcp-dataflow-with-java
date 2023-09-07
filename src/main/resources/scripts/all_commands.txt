@@ -1,12 +1,32 @@
+export BASE_DIR=/d/All_Intellij_Projects/gcp-dataflow-with-java \
+export INPUT_FILE=D:\\All_Intellij_Projects\\gcp-dataflow-with-java\\src\\main\\resources\\input\\input.csv \
+export OUTPUT_FILE=D:\\All_Intellij_Projects\\gcp-dataflow-with-java\\src\\main\\resources\\output\\output.csv \
+export MAIN_CLASS_NAME=dataflowsamples.SimpleFilterJob \
+export RUNNER=DirectRunner
+
+echo -e "BASE_DIR: $BASE_DIR \nINPUT_FILE: $INPUT_FILE \nOUTPUT_FILE: $OUTPUT_FILE" \
+"\nMAIN_CLASS_NAME: $MAIN_CLASS_NAME \nRUNNER: $RUNNER" \
+"\nGOOGLE_APPLICATION_CREDENTIALS:$GOOGLE_APPLICATION_CREDENTIALS"
+
+cd $BASE_DIR
+
+#Commands for Job Rub with DirectRunner
+#Execute the job with Maven
+mvn clean package -Pdirect
+mvn compile exec:java \
+-P direct \
+-Dexec.mainClass=$MAIN_CLASS_NAME \
+-Dexec.cleanupDaemonThreads=false \
+-Dexec.args=" \
+--runner=$RUNNER \
+--inputFile=$INPUT_FILE \
+--outputFile=$OUTPUT_FILE "
+
 # Set up environment variables
 #export PROJECT_ID=gcp-sample-397606
 #export BUCKET=gs://cloud-dataflow-java
-
-
-export BASE_DIR=/d/All_Intellij_Projects/gcp-dataflow-with-java \
 export PROJECT_ID=healthy-reason-396205 \
 export BUCKET=gs://cloud-dataflow-java123 \
-export MAIN_CLASS_NAME=dataflowsamples.SimpleFilterJob \
 export REGION='us-east1' \
 export RUNNER=DataflowRunner
 
@@ -15,33 +35,25 @@ echo -e "PROJECT_ID: $PROJECT_ID \nBUCKET: $BUCKET \nBASE_DIR: $BASE_DIR" \
 "MAIN_CLASS_NAME: $MAIN_CLASS_NAME \nREGION: $REGION \nRUNNER: $RUNNER" \
 "\nGOOGLE_APPLICATION_CREDENTIALS:$GOOGLE_APPLICATION_CREDENTIALS"
 
-cd $BASE_DIR
+
 mvn clean package -Pdataflow
+
+#Execute the job with Maven
 mvn compile exec:java \
 -Pdataflow \
--Dexec.mainClass=${MAIN_CLASS_NAME} \
+-Dexec.mainClass=$MAIN_CLASS_NAME \
 -Dexec.cleanupDaemonThreads=false \
 -Dexec.args=" \
---project=${PROJECT_ID} \
---region=${REGION} \
---stagingLocation=${BUCKET}/staging \
---tempLocation=${BUCKET}/temp \
---runner=${RUNNER} \
---inputFile=gs://cloud-dataflow-java123/input/input.csv \
---outputFile=gs://cloud-dataflow-java123/output/"
+--project=$PROJECT_ID \
+--region=$REGION \
+--stagingLocation=$BUCKET/staging \
+--tempLocation=$BUCKET/temp \
+--runner=$RUNNER \
+--inputFile=$BUCKET/input/input.csv \
+--outputFile=$BUCKET/output/output.csv" \
+--runner=$RUNNER
 
-mvn -Pdataflow exec:exec -Dexec.executable="java" -Dexec.args="-jar target/gcp-dataflow-with-java-bundled-1.0-SNAPSHOT.jar"
-java -jar target/gcp-dataflow-with-java-bundled-1.0-SNAPSHOT.jar
-java -cp ./target/gcp-dataflow-with-java-bundled-1.0-SNAPSHOT.jar ${MAIN_CLASS_NAME}  --project=${PROJECT_ID} --region=${REGION} --stagingLocation=${BUCKET}/staging  --tempLocation=${BUCKET}/temp --runner=${RUNNER}
-java -cp ./target/gcp-dataflow-with-java-bundled-1.0-SNAPSHOT.jar ${MAIN_CLASS_NAME} --runner=${RUNNER} --project=${PROJECT_ID} --region=${REGION} --stagingLocation=${BUCKET}/staging  --tempLocation=${BUCKET}/temp
-
-mvn exec:java -Dexec.mainClass="dataflowsamples.SimpleFilterJobLocal2" -Dexec.args="--inputFile=D://All_Intellij_Projects/gcp-dataflow-with-java/src/main/resources/input/input.csv --outputFile=D://All_Intellij_Projects/gcp-dataflow-with-java/src/main/resources/output/output.csv" -P direct
-java -cp ./target/beamwordcount-bundled-VER-1.0.jar beamwordcount.WordCount --inputFile=test.txt
-
-mvn clean package -Pdirect
-mvn exec:java -Dexec.mainClass="dataflowsamples.SimpleFilterJob" -Dexec.args="--inputFile=D:\All_Intellij_Projects\gcp-dataflow-with-java\src\main\resources\input\input.csv --outputFile=D:\All_Intellij_Projects\gcp-dataflow-with-java\src\main\resources\output\output.csv --runner=DirectRunner" -P direct
-mvn clean package -Pdataflow
-# Download dependencies listed in pom.xml
-mvn exec:java -Dexec.mainClass="dataflowsamples.SimpleFilterJob" -Dexec.args="--inputFile=gs://cloud-dataflow-java123/input/input.csv \
---outputFile=gs://cloud-dataflow-java123/output/ --runner=DataflowRunner \
-" -P dataflow
+#Execute the job with Java
+java -cp ./target/gcp-dataflow-with-java-bundled-1.0-SNAPSHOT.jar $MAIN_CLASS_NAME \
+--project=$PROJECT_ID --region=$REGION --stagingLocation=$BUCKET/staging/ --tempLocation=$BUCKET/temp \
+--inputFile=$BUCKET/input/input.csv --outputFile=$BUCKET/output/output.csv --runner=$RUNNER

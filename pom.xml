@@ -63,14 +63,8 @@
                 </dependency>
                 <dependency>
                     <groupId>org.apache.beam</groupId>
-                    <artifactId>beam-sdks-java-extensions-google-cloud-platform-core</artifactId>
-                    <version>${beam-version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.beam</groupId>
                     <artifactId>beam-sdks-java-io-google-cloud-platform</artifactId>
                     <version>${beam-version}</version>
-                    <!--<scope>runtime</scope>-->
                 </dependency>
             </dependencies>
         </profile>
@@ -112,10 +106,6 @@
                             </filters>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-                               <!-- <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>dataflowsamples.SimpleFilterJob2</mainClass>
-                                </transformer>-->
                             </transformers>
                         </configuration>
                     </execution>
