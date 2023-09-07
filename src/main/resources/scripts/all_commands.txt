@@ -1,6 +1,6 @@
-export BASE_DIR=/d/All_Intellij_Projects/gcp-dataflow-with-java \
-export INPUT_FILE=D:\\All_Intellij_Projects\\gcp-dataflow-with-java\\src\\main\\resources\\input\\input.csv \
-export OUTPUT_FILE=D:\\All_Intellij_Projects\\gcp-dataflow-with-java\\src\\main\\resources\\output\\output.csv \
+export BASE_DIR=/d\\gcp-projects\\gcp-dataflow-with-java \
+export INPUT_FILE=C:\\gcp-projects\\gcp-dataflow-with-java\\src\\main\\resources\\input\\input.csv \
+export OUTPUT_FILE=C:\\gcp-projects\\gcp-dataflow-with-java\\src\\main\\resources\\output\\output.csv \
 export MAIN_CLASS_NAME=dataflowsamples.SimpleFilterJob \
 export RUNNER=DirectRunner
 
@@ -8,11 +8,9 @@ echo -e "BASE_DIR: $BASE_DIR \nINPUT_FILE: $INPUT_FILE \nOUTPUT_FILE: $OUTPUT_FI
 "\nMAIN_CLASS_NAME: $MAIN_CLASS_NAME \nRUNNER: $RUNNER" \
 "\nGOOGLE_APPLICATION_CREDENTIALS:$GOOGLE_APPLICATION_CREDENTIALS"
 
-cd $BASE_DIR
-
-#Commands for Job Rub with DirectRunner
-#Execute the job with Maven
+#Create jar with profile direct
 mvn clean package -Pdirect
+#Maven for Job Run with DirectRunner
 mvn compile exec:java \
 -P direct \
 -Dexec.mainClass=$MAIN_CLASS_NAME \
@@ -23,22 +21,21 @@ mvn compile exec:java \
 --outputFile=$OUTPUT_FILE "
 
 # Set up environment variables
-#export PROJECT_ID=gcp-sample-397606
-#export BUCKET=gs://cloud-dataflow-java
-export PROJECT_ID=healthy-reason-396205 \
-export BUCKET=gs://cloud-dataflow-java123 \
+export PROJECT_ID=gcp-sample-397606 \
 export REGION='us-east1' \
+export BUCKET=gs://cloud-dataflow-java \
+export MAIN_CLASS_NAME=dataflowsamples.SimpleFilterJob \
 export RUNNER=DataflowRunner
 
 
-echo -e "PROJECT_ID: $PROJECT_ID \nBUCKET: $BUCKET \nBASE_DIR: $BASE_DIR" \
-"MAIN_CLASS_NAME: $MAIN_CLASS_NAME \nREGION: $REGION \nRUNNER: $RUNNER" \
-"\nGOOGLE_APPLICATION_CREDENTIALS:$GOOGLE_APPLICATION_CREDENTIALS"
+echo -e "PROJECT_ID: $PROJECT_ID\nBUCKET: $BUCKET\nMAIN_CLASS_NAME: $MAIN_CLASS_NAME\nREGION: $REGION\nRUNNER: $RUNNER\nGOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS"
 
 
+
+#Create jar with profile dataflow
 mvn clean package -Pdataflow
 
-#Execute the job with Maven
+#Maven for Job Run with DataflowRunner
 mvn compile exec:java \
 -Pdataflow \
 -Dexec.mainClass=$MAIN_CLASS_NAME \
@@ -46,14 +43,8 @@ mvn compile exec:java \
 -Dexec.args=" \
 --project=$PROJECT_ID \
 --region=$REGION \
---stagingLocation=$BUCKET/staging \
+--stagingLocation=$BUCKET/stage \
 --tempLocation=$BUCKET/temp \
---runner=$RUNNER \
 --inputFile=$BUCKET/input/input.csv \
---outputFile=$BUCKET/output/output.csv" \
---runner=$RUNNER
-
-#Execute the job with Java
-java -cp ./target/gcp-dataflow-with-java-bundled-1.0-SNAPSHOT.jar $MAIN_CLASS_NAME \
---project=$PROJECT_ID --region=$REGION --stagingLocation=$BUCKET/staging/ --tempLocation=$BUCKET/temp \
---inputFile=$BUCKET/input/input.csv --outputFile=$BUCKET/output/output.csv --runner=$RUNNER
+--outputFile=$BUCKET/output/output.csv \
+--runner=$RUNNER"
