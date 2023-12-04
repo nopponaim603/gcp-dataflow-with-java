@@ -8,12 +8,12 @@ To activate a specific profile during the Maven build, you can use the -P flag f
 
 For local development: 
 ```
-mvn clean install -Pdirect
+mvn clean install -P direct
 ```
 
 For cloud deployment: 
 ```
-mvn clean install -Pdataflow
+mvn clean install -P dataflow
 ```
 By using profiles, you can easily switch between different configurations and dependencies, making your development process more flexible and efficient.
 
@@ -67,7 +67,7 @@ We compile and run this program using Maven compile exec:java as before.
 
 ```
 mvn compile exec:java \
--Pdataflow \
+-P dataflow \
 -Dexec.mainClass=$MAIN_CLASS_NAME \
 -Dexec.cleanupDaemonThreads=false \
 -Dexec.args=" \
