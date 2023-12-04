@@ -40,7 +40,7 @@ mvn compile exec:java \
 -Dexec.args=" \
 --runner=$RUNNER \
 --inputFile=$INPUT_FILE \
---outputFile=$OUTPUT_FILE "
+--outputFile=$OUTPUT_FILE"
 ```
 
 ---

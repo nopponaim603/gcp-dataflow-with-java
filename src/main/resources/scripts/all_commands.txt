@@ -1,6 +1,6 @@
 export BASE_DIR=/d\\gcp-projects\\gcp-dataflow-with-java \
-export INPUT_FILE=C:\\gcp-projects\\gcp-dataflow-with-java\\src\\main\\resources\\input\\input.csv \
-export OUTPUT_FILE=C:\\gcp-projects\\gcp-dataflow-with-java\\src\\main\\resources\\output\\output.csv \
+export INPUT_FILE=C:\\Users\\noppo\\IdeaProjects\\gcp-dataflow-with-java\\src\\main\\resources\\input\\input.csv \
+export OUTPUT_FILE=C:\\Users\\noppo\\IdeaProjects\\gcp-dataflow-with-java\\src\\main\\resources\\output\\output.csv \
 export MAIN_CLASS_NAME=dataflowsamples.SimpleFilterJob \
 export RUNNER=DirectRunner
 
@@ -9,8 +9,11 @@ echo -e "BASE_DIR: $BASE_DIR \nINPUT_FILE: $INPUT_FILE \nOUTPUT_FILE: $OUTPUT_FI
 "\nGOOGLE_APPLICATION_CREDENTIALS:$GOOGLE_APPLICATION_CREDENTIALS"
 
 #Create jar with profile direct
+
 mvn clean package -Pdirect
+
 #Maven for Job Run with DirectRunner
+
 mvn compile exec:java \
 -P direct \
 -Dexec.mainClass=$MAIN_CLASS_NAME \
@@ -18,24 +21,25 @@ mvn compile exec:java \
 -Dexec.args=" \
 --runner=$RUNNER \
 --inputFile=$INPUT_FILE \
---outputFile=$OUTPUT_FILE "
+--outputFile=$OUTPUT_FILE"
 
 # Set up environment variables
-export PROJECT_ID=gcp-sample-397606 \
-export REGION='us-east1' \
-export BUCKET=gs://cloud-dataflow-java \
+
+export PROJECT_ID=phd-e2d-gameanalytics \
+export REGION='asia-southeast1' \
+export BUCKET=gs://word-count-logs \
 export MAIN_CLASS_NAME=dataflowsamples.SimpleFilterJob \
 export RUNNER=DataflowRunner
 
 
 echo -e "PROJECT_ID: $PROJECT_ID\nBUCKET: $BUCKET\nMAIN_CLASS_NAME: $MAIN_CLASS_NAME\nREGION: $REGION\nRUNNER: $RUNNER\nGOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS"
 
-
-
 #Create jar with profile dataflow
+
 mvn clean package -Pdataflow
 
 #Maven for Job Run with DataflowRunner
+
 mvn compile exec:java \
 -Pdataflow \
 -Dexec.mainClass=$MAIN_CLASS_NAME \
